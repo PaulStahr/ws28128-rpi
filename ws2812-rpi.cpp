@@ -216,14 +216,14 @@ unsigned int NeoPixel::mem_virt_to_phys(void *virt){
     return page_map[offset >> PAGE_SHIFT].physaddr + (offset % PAGE_SIZE);    
 }
 
-unsigned int NeoPixel::mem_phys_to_virt(uint32_t phys){
+uint8_t* NeoPixel::mem_phys_to_virt(uint32_t phys){
     unsigned int pg_offset = phys & (PAGE_SIZE - 1);
     unsigned int pg_addr = phys - pg_offset;
     int i;
 
     for (i = 0; i < NUM_PAGES; i++) {
         if (page_map[i].physaddr == pg_addr) {
-            return (uint32_t)virtbase + i * PAGE_SIZE + pg_offset;
+            return virtbase + i * PAGE_SIZE + pg_offset;
         }
     }
     fatal("Failed to reverse map phys addr %08x\n", phys);
