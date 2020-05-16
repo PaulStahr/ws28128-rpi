@@ -1,10 +1,17 @@
-ws2812-rpi.o: ws2812-rpi.cpp ws2812-rpi.h
-	g++ ws2812-rpi.cpp -c -o ws2812-rpi.o -lrt
+CFLAGS= -Wall -Wextra -pedantic -g -O2 -fopenmp -std=c++14
+CFLAGS += -DNDEBUG
 
-ws2812-rpi-test: ws2812-rpi.o ws2812-rpi-test.cpp
-	g++ ws2812-rpi-test.cpp ws2812-rpi.o -o ws2812-rpi-test
+SRC := src
+BUILT := built
+DOC := doc
 
-all: ws2812-rpi.o ws2812-rpi-test
+$(BUILT)/ws2812-rpi.o: $(SRC)/ws2812-rpi.cpp $(SRC)/ws2812-rpi.h
+	g++ $(SRC)/ws2812-rpi.cpp -c -o $(BUILT)/ws2812-rpi.o -lrt
+
+ws2812-rpi-test: $(BUILT)/ws2812-rpi.o $(SRC)/ws2812-rpi-test.cpp
+	g++ $(SRC)/ws2812-rpi-test.cpp $(BUILT)/ws2812-rpi.o -o ws2812-rpi-test
+
+all: $(BUILT)/ws2812-rpi.o ws2812-rpi-test
 
 clean:
 	rm -f ws2812-rpi.o
